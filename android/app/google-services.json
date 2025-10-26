@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "425301891972",
+    "firebase_url": "https://test-d1cec-default-rtdb.firebaseio.com",
+    "project_id": "test-d1cec",
+    "storage_bucket": "test-d1cec.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:425301891972:android:1806ea41a8f280dcea9bd1",
+        "android_client_info": {
+          "package_name": "com.example.my_pantry_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCN5QK_qnF7oy9FB-IhwlbZz4PSIQMuJYM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
