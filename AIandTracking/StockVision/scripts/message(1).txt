@@ -1,0 +1,80 @@
+import sys
+from datetime import datetime
+from flask import Flask, jsonify
+import firebase_admin
+from firebase_admin import credentials, firestore
+
+# --- 1. Initialize Firebase Firestore ---
+cred = credentials.Certificate("serviceAccountKey.json")
+firebase_admin.initialize_app(cred)
+db = firestore.client()
+
+# --- 2. Configuration ---
+USER_ID = "EwUldNgNHpeLzLdxhRXBSKIlKC82"  # replace with your teammate's user ID
+PANTRY_PATH = f"users/{USER_ID}/pantry"
+
+# --- 3. Update inventory item ---
+def update_inventory(item_name: str, change: int):
+    user_id = "EwUldNgNHpeLzLdxhRXBSKllKC82"
+    pantry_ref = db.collection("users").document(user_id).collection("pantry")
+
+    # 🔍 Find document where field name == item_name
+    query = pantry_ref.where("name", "==", item_name).limit(1).get()
+
+    if not query:
+        print(f"⚠️ No existing item found for '{item_name}' in pantry.")
+        return
+
+    doc = query[0]
+    doc_ref = doc.reference
+    data = doc.to_dict()
+
+    # Parse current quantity, handle units (e.g. "1 LB")
+    current_qty_str = str(data.get("quantity", "0"))
+    numeric_part = ''.join([c for c in current_qty_str if c.isdigit()])
+    unit_part = ''.join([c for c in current_qty_str if not c.isdigit()]).strip() or "unit"
+
+    try:
+        current_qty = int(numeric_part)
+    except ValueError:
+        current_qty = 0
+
+    new_qty = max(current_qty + change, 0)
+    new_quantity_str = f"{new_qty} {unit_part}"
+
+    timestamp = datetime.now().strftime("%m/%d/%Y %I:%M:%S %p")
+
+    # 🔁 Update existing document
+    doc_ref.update({
+        "quantity": new_quantity_str,
+        "timestamp": timestamp
+    })
+
+    print(f"✅ Updated {item_name}: {current_qty_str} → {new_quantity_str} at {timestamp}")
+
+# --- 4. Flask app for live view ---
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "Smart Cabinet Firestore system running! Go to /inventory."
+
+@app.route("/inventory")
+def get_inventory():
+    pantry_ref = db.collection(PANTRY_PATH)
+    docs = pantry_ref.stream()
+    inventory = {doc.id: doc.to_dict() for doc in docs}
+    return jsonify(inventory)
+
+# --- 5. Command-line usage + server ---
+if __name__ == "__main__":
+    if len(sys.argv) == 3:
+        item = sys.argv[1]
+        try:
+            change = int(sys.argv[2])
+        except ValueError:
+            print("Change must be an integer, e.g., +1 or -2")
+            sys.exit(1)
+        update_inventory(item, change)
+    else:
+        app.run(debug=True)

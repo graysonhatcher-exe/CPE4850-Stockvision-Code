@@ -1,0 +1,38 @@
+train: E:\StockVision\StockVisionDatasetFINAL.v1i.yolov8\images\train
+val: E:\StockVision\StockVisionDatasetFINAL.v1i.yolov8\images\valid
+test: E:\StockVision\StockVisionDatasetFINAL.v1i.yolov8\images\test
+
+nc: 10
+
+names:
+  0: Butter Finger
+  1: Crackers
+  2: Doritos
+  3: Granola Bar
+  4: Gummy
+  5: Canned-Corn
+  6: Canned-Peas
+  7: Canned-Tuna
+  8: Mac-And-Cheese
+  9: Ramen
+
+# Increase weight for weak classes (1–4)
+class_weights: [
+  1.0,  # Butter Finger
+  3.0,  # Crackers
+  3.0,  # Doritos
+  3.0,  # Granola Bar
+  3.0,  # Gummy
+  1.0,  # Canned-Corn
+  1.0,  # Canned-Peas
+  1.0,  # Canned-Tuna
+  1.0,  # Mac-And-Cheese
+  1.0   # Ramen
+]
+
+roboflow:
+  workspace: grayscale
+  project: stockvision-dataset-final
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/grayscale/stockvision-dataset-final/dataset/1

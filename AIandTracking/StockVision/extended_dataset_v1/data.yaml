@@ -1,0 +1,13 @@
+train: E:\StockVision\extended_dataset_v1\images\train
+val: E:\StockVision\extended_dataset_v1\images\valid
+test: E:\StockVision\extended_dataset_v1\images\test
+
+nc: 10
+names: ['Butter Finger', 'Crackers', 'Doritos', 'Granola Bar', 'Gummy', 'Canned-Corn', 'Canned-Peas', 'Canned-Tuna', 'Mac-And-Cheese', 'Ramen']
+
+roboflow:
+  workspace: grayscale
+  project: stockvision-datasets-1-2-merged-44qpq
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/grayscale/stockvision-datasets-1-2-merged-44qpq/dataset/1
